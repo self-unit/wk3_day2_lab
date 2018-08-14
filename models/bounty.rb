@@ -2,7 +2,7 @@ require('pg')
 
 class Bounty
 
-  attr_accessor :name, :species, :bounty_value, :danger_level
+  attr_accessor :name, :species, :bounty_value, :danger_level, :last_known_location, :homeworld, :favourite_weapon, :cashed_in, :collected_by
   attr_reader :id
 
   def initialize(options)
@@ -11,6 +11,11 @@ class Bounty
     @species = options['species']
     @bounty_value = options['bounty_value'].to_i
     @danger_level = options['danger_level']
+    @last_known_location = options['last_known_location']
+    @homeworld = options['homeworld']
+    @favourite_weapon = options['favourite_weapon']
+    @cashed_in = options['cashed_in']
+    @collected_by = options['collected_by']
   end
 
   def save()
@@ -71,7 +76,7 @@ class Bounty
     db.prepare("find_name", sql)
     named_entry = db.exec_prepared("find_name", values)
     db.close()
-    return named_entry[0]
+    named_entry.count > 0 ? named_entry[0] : nil
   end
 
   def Bounty.find_id(id)
@@ -82,7 +87,7 @@ class Bounty
     db.prepare("find_id", sql)
     queried_id = db.exec_prepared("find_id", values)
     db.close()
-    return queried_id[0]
+    queried_id.count > 0 ? queried_id[0] : nil
   end
 
 end
