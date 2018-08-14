@@ -21,9 +21,9 @@ class Bounty
   def save()
     db = PG.connect ({dbname: 'bounties', host: 'localhost'})
     sql = "INSERT INTO bounties
-          (name, species, bounty_value, danger_level)
-          VALUES($1, $2, $3, $4) RETURNING *"
-    values = [@name, @species, @bounty_value, @danger_level]
+          (name, species, bounty_value, danger_level, last_known_location, homeworld, favourite_weapon, cashed_in, collected_by)
+          VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *"
+    values = [@name, @species, @bounty_value, @danger_level, @last_known_location, @homeworld, @favourite_weapon, @cashed_in, @collected_by]
     db.prepare("save", sql)
     @id = db.exec_prepared("save", values)[0]['id'].to_i
     db.close()
@@ -43,9 +43,9 @@ class Bounty
     db = PG.connect ({dbname: 'bounties', host: 'localhost'})
     sql = "UPDATE bounties
           SET (name, species, bounty_value, danger_level) =
-          ($1, $2, $3, $4)
-          WHERE id = $5"
-    values = [@name, @species, @bounty_value, @danger_level, @id]
+          ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+          WHERE id = $10"
+    values = [@name, @species, @bounty_value, @danger_level, @last_known_location, @homeworld, @favourite_weapon, @cashed_in, @collected_by, @id]
     db.prepare("update", sql)
     db.exec_prepared("update", values)
     db.close()
