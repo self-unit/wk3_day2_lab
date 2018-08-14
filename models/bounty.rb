@@ -65,24 +65,24 @@ class Bounty
 
   def Bounty.find_by_name(name)
     db = PG.connect ({dbname: 'bounties', host: 'localhost'})
-    sql = "SELECT FROM bounties
+    sql = "SELECT * FROM bounties
           WHERE name = $1"
     values = [name]
     db.prepare("find_by_name", sql)
     named_entry = db.exec_prepared("find_by_name", values)
     db.close()
-    return Bounty.new(named_entry[0])
+    return named_entry[0]
   end
 
   def Bounty.find_by_id(id)
     db = PG.connect ({dbname: 'bounties', host: 'localhost'})
-    sql = "SELECT FROM bounties
+    sql = "SELECT * FROM bounties
           WHERE id = $1"
     values = [id]
     db.prepare("find_by_id", sql)
     queried_id = db.exec_prepared("find_by_id", values)
     db.close()
-    return Bounty.new(queried_id[0])
+    return queried_id[0]
   end
 
 end
